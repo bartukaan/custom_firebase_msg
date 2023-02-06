@@ -286,7 +286,11 @@ NSString *const kMessagingPresentationOptionsUserDefaults =
   NSDictionary *remoteNotification = notification.request.content.userInfo;
 
   if (remoteNotification[@"source"] && [remoteNotification[@"source"] isEqualToString:@"Insider"]) {
-    [_channel invokeMethod:@"Messaging#onMessage" arguments:remoteNotification];
+    NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
+
+    message[@"data"] = remoteNotification;
+
+    [_channel invokeMethod:@"Messaging#onMessage" arguments:message];
   } else if (remoteNotification[@"gcm.message_id"]) {
     NSDictionary *notificationDict =
         [FLTFirebaseMessagingPlugin NSDictionaryFromUNNotification:notification];
@@ -332,7 +336,11 @@ NSString *const kMessagingPresentationOptionsUserDefaults =
   // We only want to handle FCM notifications.
 
   if (remoteNotification[@"source"] && [remoteNotification[@"source"] isEqualToString:@"Insider"]) {
-    [_channel invokeMethod:@"Messaging#onMessageOpenedApp" arguments:remoteNotification];
+    NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
+
+    message[@"data"] = remoteNotification;
+
+    [_channel invokeMethod:@"Messaging#onMessageOpenedApp" arguments:message];
   } else if (remoteNotification[@"gcm.message_id"]) {
     NSDictionary *notificationDict =
         [FLTFirebaseMessagingPlugin remoteMessageUserInfoToDict:remoteNotification];

@@ -283,10 +283,9 @@ NSString *const kMessagingPresentationOptionsUserDefaults =
              (void (^)(UNNotificationPresentationOptions options))completionHandler
     API_AVAILABLE(macos(10.14), ios(10.0)) {
   // We only want to handle FCM notifications.
+  NSDictionary *remoteNotification = notification.request.content.userInfo;
 
   if (remoteNotification[@"source"] && [remoteNotification[@"source"] isEqualToString:@"Insider"]) {
-    NSDictionary *remoteNotification = response.notification.request.content.userInfo;
-
     [_channel invokeMethod:@"Messaging#onMessage" arguments:remoteNotification];
   } else if (remoteNotification[@"gcm.message_id"]) {
     NSDictionary *notificationDict =
